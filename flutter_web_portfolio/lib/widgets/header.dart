@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_portfolio/theme/theme.dart';
 
 class Header extends StatelessWidget {
   final void Function(String section) onNavItemClick;
@@ -10,35 +11,44 @@ class Header extends StatelessWidget {
     bool isMobile = MediaQuery.of(context).size.width < 600;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      color: Colors.teal[800],
+      color: portfolioTheme.primaryColor,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("My Portfolio", style: TextStyle(color: Colors.white)),
-          if (!isMobile)
+          const Text(
+            "My Portfolio",
+            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          if (isMobile)
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, color: Colors.white),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            )
+          else
             Row(
-              children: [
-                TextButton(
-                  onPressed: () => onNavItemClick("home"),
-                  child: const Text("Home", style: TextStyle(color: Colors.white)),
-                ),
-                TextButton(
-                  onPressed: () => onNavItemClick("about"),
-                  child: const Text("About", style: TextStyle(color: Colors.white)),
-                ),
-                TextButton(
-                  onPressed: () => onNavItemClick("projects"),
-                  child: const Text("Projects", style: TextStyle(color: Colors.white)),
-                ),
-                TextButton(
-                  onPressed: () => onNavItemClick("contact"),
-                  child: const Text("Contact", style: TextStyle(color: Colors.white)),
-                ),
-              ],
+              children: _buildNavButtons(),
             ),
         ],
       ),
+    );
+  }
+
+  List<Widget> _buildNavButtons() {
+    return [
+      _navButton("Home", "home"),
+      _navButton("About", "about"),
+      _navButton("Projects", "projects"),
+      _navButton("Contact", "contact"),
+    ];
+  }
+
+  Widget _navButton(String label, String section) {
+    return TextButton(
+      onPressed: () => onNavItemClick(section),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 }

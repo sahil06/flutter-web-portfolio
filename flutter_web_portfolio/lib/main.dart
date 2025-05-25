@@ -55,6 +55,18 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        backgroundColor: portfolioTheme.primaryColorDark,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            _drawerItem(context, "Home", "home"),
+            _drawerItem(context, "About", "about"),
+            _drawerItem(context, "Projects", "projects"),
+            _drawerItem(context, "Contact", "contact"),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
@@ -76,5 +88,22 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
         ),
       ),
     );
+  }
+
+  Widget _drawerItem(BuildContext context, String title, String sectionKey) {
+    return ListTile(
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      onTap: () {
+        Navigator.of(context).pop(); // close drawer
+        onNavItemClick(sectionKey); // scroll to section
+      },
+    );
+  }
+
+  void onNavItemClick(String section) {
+    if (section == "home") scrollToSection(_homeKey);
+    if (section == "about") scrollToSection(_aboutKey);
+    if (section == "projects") scrollToSection(_projectsKey);
+    if (section == "contact") scrollToSection(_contactKey);
   }
 }
